@@ -1,7 +1,29 @@
 <?php
+	include("JSON.php");
+	// Future-friendly json_encode
+	if( !function_exists('json_encode2') ) 
+	{
+		function json_encode2($data) 
+		{
+			$json = new Services_JSON();
+			return( $json->encode($data) );
+		}
+	}
+
+	// Future-friendly json_decode
+	if( !function_exists('json_decode2') ) 
+	{
+		function json_decode2($data) 
+		{
+			$json = new Services_JSON();
+			return( $json->decode($data) );
+		}
+	}	
+
+	
 	//var_dump($_POST);
 	$idValue = $_POST["data"];
-	$data = json_decode($_POST["data"]);
+	$data = json_decode2($_POST["data"]);
 	
 	print("<p>");
 	echo $idValue . "\n";// . $data.;
@@ -18,26 +40,5 @@
 		}
 		
 		print("<p>");
-	}
-	
-	function json_decode($json)
-	{
-		$comment = false;
-		$out = '$x=';
-	 
-		for ($i=0; $i<strlen($json); $i++)
-		{
-			if (!$comment)
-			{
-				if (($json[$i] == '{') || ($json[$i] == '['))       $out .= ' array(';
-				else if (($json[$i] == '}') || ($json[$i] == ']'))   $out .= ')';
-				else if ($json[$i] == ':')    $out .= '=>';
-				else                         $out .= $json[$i];         
-			}
-			else $out .= $json[$i];
-			if ($json[$i] == '"' && $json[($i-1)]!="\\")    $comment = !$comment;
-		}
-		eval($out . ';');
-		return $x;
 	}
 ?>
