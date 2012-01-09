@@ -17,8 +17,10 @@ Click on the center of each pictured symmetrical object:
 	$imagelist = scandir($imgdir);
 	
 	$num = array_rand($imagelist);
-	$num2 = array_rand($imagelist);
-	if ($num2 == $num) { $num2 = array_rand($imagelist);} //prevent identical images
+	do 
+	{
+		$num2 = array_rand($imagelist);
+	} while ($num2 == $num); //prevent identical images
 	
 	$image1 = $imgdir . $imagelist[$num];
 	$image2 = $imgdir . $imagelist[$num2];
@@ -34,10 +36,8 @@ Click on the center of each pictured symmetrical object:
 	</canvas>
 
 	<script type="text/javascript">
-		var img1x = new Array();
-		var img1y = new Array();
-		var img2x = new Array();
-		var img2y = new Array();
+		var img1xy = new Array();
+		var img2xy = new Array();
 	
 		function CircleOnClick(event){
 			// Get mouse clicks
@@ -57,14 +57,21 @@ Click on the center of each pictured symmetrical object:
 			var centerY = mouseY - 95 //canvas.height / 2;
 			var radius = 10;
 			
+			var xy = new Object();
+			xy.y = centerY;
+			
 			// Write (x,y) position of click to array
 			if(centerX <= 400){
-				img1x.push(centerX);
-				img1y.push(centerY);
+				xy.x = centerX;
+				img1xy.push(xy);
+				//img1x.push(centerX);
+				//img1y.push(centerY);
 			}
 			else {
-				img2x.push(centerX-400);
-				img2y.push(centerY);
+				xy.x = centerX-400;
+				img2xy.push(xy);
+				//img2x.push(centerX-400);
+				//img2y.push(centerY);
 			}
 			
 			// Draw a red circle
@@ -110,20 +117,33 @@ Click on the center of each pictured symmetrical object:
 	
 	<script type="text/javascript">
 	// TODO: package the coordinate data, send to data.php to interact with database
-		function SendData(x1, y1, x2, y2){
-			var msg1 = "Left image: (" + x1[0] + "," + y1[0] + ")";
-			var msg2 = "\nRight image: (" + x2[0] + "," + y2[0] + ")";
-			alert(msg1 + msg2);
+		function SendData(xy1, xy2){
+			//var msg1 = "Left image: (" + xy1[0].x + "," + xy1[0].y + ")";
+			//var msg2 = "\nRight image: (" + xy2[0].x + "," + xy2[0].y + ")";
+			//alert(msg1 + msg2);
+						
+			var dataToDB = 
+			{	"captcha":
+				[
+					{ "image":"<?php echo $image1 ?>", "data": xy1 }
+					,{ "image":"<?php echo $image2 ?>", "data": xy2 }
+				]
+			};
+			var jsonStr = JSON.stringify(dataToDB);
+			//alert(jsonStr);
 			
-			// var dataToDB = {"file":"<?php echo $image1 ?>" , "x": "x1", "y": "y1"};
-			// var jsonStr = JSON.stringify(dataToDB);
-			//document.write(msg);
+			document.getElementById('xyData').setAttribute("value", jsonStr);
+			document.getElementById('frmSubmit').submit();
 		}
+		
 	</script>
 	<p>
-	<button type="button" onclick="SendData(img1x,img1y,img2x,img1y)">Submit</button>
+	<button type="button" onclick="SendData(img1xy,img2xy)">Submit</button>
 	<button type="button" onclick="window.location.reload()">Reset</button>
 	</p>
+	<form id="frmSubmit" method="POST" action="data.php">
+		<input id="xyData" type="hidden" name="data" value="" />
+	</form>
 </body>
 
-</html>	
+</html>
