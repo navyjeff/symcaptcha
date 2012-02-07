@@ -2,43 +2,30 @@ Symcaptcha is a proof of concept for a CAPTCHA with an intuitive interface.
 
 Jeffrey Borck, navyjeff@gmail.com
 
-This project to be open source and public domain. You're free to do what you 
-like with it. Have fun. Let me know if you use it.
+This project to be open source and public domain. You're free to do what you  like with it. Have fun. Let me know if you use it.
 
-json2.js is public domain, courtesy of Douglas Crockford:
-https://github.com/douglascrockford/JSON-js
+json2.js is public domain, courtesy of Douglas Crockford: https://github.com/douglascrockford/JSON-js
 
 Requires:
 Web server with PHP 5.1 or later, with SQLite3
 HTML 5-compatible browser with Javascript enabled
 
 
-The basis of this project is symmetry. In real-world images, computers are
-known to have difficulty distinguishing and interpreting symmetry as humans do.
-Symmetrical objects in our 3D world are often represented in 2D photographs.
-Humans can easily recognize context and when shapes and objects have symmetry.
+The basis of this project is symmetry. In real-world images, computers are known to have difficulty distinguishing and interpreting symmetry as humans do. Symmetrical objects in our 3D world are often represented in 2D photographs. Humans can easily recognize context and when shapes and objects have symmetry.
 
-This project is a relatively simple web page that presents the user with two 
-images from it's file. Similar to Recaptcha, one image will have known points 
-of symmetry in a reference database, the other will be unknown. The user will 
-click on the centers of rotational symmetry (or draw lines of reflection 
-symmetry, in future editions) and submit them. If the points match up for the 
-known image, the points submitted for the unknown image will also be recorded 
-in the database.
+This project is a relatively simple web page that presents the user with two images from it's file. Similar to Recaptcha, one image will have known points of symmetry in a reference database, the other will be unknown. The user will click on the centers of rotational symmetry (or draw lines of reflection symmetry, in future editions) and submit them. If the points match up for the known image, the points submitted for the unknown image will also be recorded in the database.
 
 Relevant files:
 captcha.php  	The main web page with captcha query.
 /imgs  			Directory containing pictures, 400x300, JPEG format
-data.php		Data processing scripts, containing functions to read/write to
-					the SQLite database, evaluate coordinate pairs, and return
-					a pass/fail signal.
+data.php		Data processing scripts, containing functions to read/write to the SQLite database, evaluate coordinate pairs, and return a pass/fail signal.
 json2.js		Necessary javascript functions for captcha.php
 json.php		JSON conversion PHP script (unnecessary with PHP 5.2 or later)
 phpinfo.php		Debugging script
 
 Working:
 captcha.php catalogs, sorts, and gets two random images from the /imgs directory
-Displays two images side by side (html5 canvas in captcha.php)
+Displays two images side by side (html5 canvas in captcha.php) 
 Records and indicates any number of clicks on the images (javascript in captcha.php)
 Passes the location (x,y pairs) to data.php via JSON.
 
